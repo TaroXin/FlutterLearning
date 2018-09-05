@@ -4,6 +4,7 @@ import './src/image-example.dart';
 import './src/swiper-to-close.dart';
 import './src/navigator-with-param.dart';
 import './src/return-data-page.dart';
+import './src/banner.dart';
 
 void main() => runApp(new MyApp());
 
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         '/image': (BuildContext context) => new ImageExample(),
         '/swiper-to-close': (BuildContext context) => new SwipeToClose(),
         '/navigator-with-param': (BuildContext context) => new NavigatorWithParam(),
-        '/return-data-page': (BuildContext context) => new ReturnDataPage()
+        '/return-data-page': (BuildContext context) => new ReturnDataPage(),
+        '/banner': (BuildContext context) => new BannerPage(),
       },
 
       home: new HomePage(),
@@ -98,7 +100,12 @@ class HomePage extends StatelessWidget {
               new RaisedButton(
                 child: new Text('新页面返回数据给旧页面'),
                 onPressed: () => _waitParamNavigator(context, '/return-data-page'),
-              )
+              ),
+
+              new RaisedButton(
+                child: new Text('Banner 示例'),
+                onPressed: () => _pushToNavigator(context, '/banner'),
+              ),
             ],
           ),
         );
