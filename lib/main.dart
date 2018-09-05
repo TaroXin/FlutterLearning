@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './src/list.dart';
 import './src/image-example.dart';
 import './src/swiper-to-close.dart';
+import './src/navigator-with-param.dart';
 
 void main() => runApp(new MyApp());
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         '/list': (BuildContext context) => new RandomWords(),
         '/image': (BuildContext context) => new ImageExample(),
         '/swiper-to-close': (BuildContext context) => new SwipeToClose(),
-        '/navigator-with-param': (BuildContext context) => new SwipeToClose(),
+        '/navigator-with-param': (BuildContext context) => new NavigatorWithParam(),
       },
 
       home: new HomePage(),
