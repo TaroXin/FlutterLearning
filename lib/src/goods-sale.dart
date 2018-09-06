@@ -12,6 +12,7 @@ class GoodsSale extends StatefulWidget {
 
 class GoodsSaleComponent extends State<GoodsSale> {
   List<GoodsClassModel> _goodsList = new List();
+  int goodsTotalCount = 0;
 
   @override
   void initState() {
@@ -47,6 +48,19 @@ class GoodsSaleComponent extends State<GoodsSale> {
     }
   }
 
+  void onGoodsCountChange() {
+    int sum = 0;
+    for (var goodsClass in _goodsList) {
+      for (var goods in goodsClass.goods) {
+        sum += goods.count;
+      }
+    }
+
+    setState(() {
+      goodsTotalCount = sum;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -58,14 +72,83 @@ class GoodsSaleComponent extends State<GoodsSale> {
         children: <Widget>[
           new Expanded(
             child: _goodsList.length > 0 ?
-              new GoodsClassState(_goodsList) :
+              new GoodsClassState(
+                _goodsList,
+                onGoodsCountChange: onGoodsCountChange,
+              ) :
               new GoodsLoading(),
           ),
 
           _goodsList.length > 0 ?
             new Container(
-              color: Colors.blue,
               height: 55.0,
+              child: new Row(
+                children: <Widget>[
+                  new Container(
+                    width: 45.0,
+                    height: 40.0,
+                    child: new Stack(
+                      alignment: AlignmentDirectional.topEnd,
+                      children: <Widget>[
+                        new Center(
+                          child: new Icon(
+                            Icons.shopping_cart,
+                            color: Colors.blue,
+                          ),
+                        ),
+
+                        goodsTotalCount > 0 ?
+                          new Container(
+                            width: 22.0,
+                            height: 22.0,
+                            padding: EdgeInsets.all(2.0),
+                            alignment: Alignment.center,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.redAccent
+                            ),
+                            child: new Text(
+                              goodsTotalCount.toString(),
+                              style: new TextStyle(
+                                  color: Colors.white
+                              ),
+                            ),
+                          ) :
+                          new Container()
+                      ],
+                    ),
+                  ),
+
+                  new Expanded(
+                    child: new Container(
+                    ),
+                  ),
+
+                  new Container(
+                    width: 55.0,
+                    height: 55.0,
+                    color: Colors.orangeAccent,
+                    child: new Icon(
+                      Icons.crop_landscape,
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  new Container(
+                    width: 120.0,
+                    height: 55.0,
+                    color: Colors.blue,
+                    child: new Center(
+                      child: new Text(
+                        '结算',
+                        style: new TextStyle(
+                            color: Colors.white
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ) :
             new Container()
 
@@ -77,24 +160,33 @@ class GoodsSaleComponent extends State<GoodsSale> {
 
 class GoodsClassState extends StatefulWidget {
   final List<GoodsClassModel> _goodsList;
+  final Function onGoodsCountChange;
 
-  GoodsClassState(this._goodsList, {Key key}) : super(key: key);
+  GoodsClassState(this._goodsList, {Key key, this.onGoodsCountChange}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new GoodsClass(_goodsList);
+    return new GoodsClass(_goodsList, onGoodsCountChange: onGoodsCountChange);
   }
 }
 
 class GoodsClass extends State<GoodsClassState> {
   final List<GoodsClassModel> _goodsList;
   int _classActive = 0;
+  Function onGoodsCountChange;
 
-  GoodsClass(this._goodsList);
+  GoodsClass(this._goodsList, {this.onGoodsCountChange});
 
   onTilePressed (index) {
     setState(() {
       _classActive = index;
+    });
+  }
+
+  void onGoodsStateChange(goods, count) {
+    setState(() {
+      goods.count = count;
+      onGoodsCountChange();
     });
   }
 
@@ -132,7 +224,10 @@ class GoodsClass extends State<GoodsClassState> {
         ),
 
         new Expanded(
-          child: new GoodsList(_goodsList),
+          child: new GoodsList(
+            _goodsList,
+            onGoodsStateChange: onGoodsStateChange,
+          ),
         )
       ],
     );
@@ -141,8 +236,9 @@ class GoodsClass extends State<GoodsClassState> {
 
 class GoodsList extends StatelessWidget {
   final List<GoodsClassModel> _goodsList;
+  Function onGoodsStateChange;
 
-  GoodsList(this._goodsList);
+  GoodsList(this._goodsList, {this.onGoodsStateChange});
 
   List get formatGoodsList {
     List list = new List();
@@ -166,7 +262,8 @@ class GoodsList extends StatelessWidget {
           if (formatGoodsList[index] is GoodsClassModel) {
             GoodsClassModel goodsClass = formatGoodsList[index];
             return new Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              alignment: Alignment.centerLeft,
               color: new Color(0xFFC0C0C0),
               height: 25.0,
               child: new Text(
@@ -178,11 +275,132 @@ class GoodsList extends StatelessWidget {
             );
           } else {
             GoodsModel goods = formatGoodsList[index];
-            return new ListTile(
-              title: new Text(goods.goodsName),
+            return new Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: new Container(
+                height: 90.0,
+                child: new Column(
+                  children: <Widget>[
+                    new Container(
+                      color: Colors.blue,
+                      height: 50.0,
+                      width: 750.0,
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      alignment: Alignment.centerLeft,
+                      child: new Text(
+                        goods.goodsName + "DDASDASDSAD测试测试测试测试测试测试测试测试测试测试测试",
+                        style: new TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.white,
+                        ),
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    
+                    new Container(
+                      color: Colors.white,
+                      height: 40.0,
+                      width: 750.0,
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          new Text(
+                            goods.price.toString(),
+                            style: new TextStyle(
+                              color: Colors.blue
+                            ),
+                          ),
+
+                          new InputNumber(
+                            goods.count,
+                            add: () {
+                              this.onGoodsStateChange(goods, goods.count + 1);
+                            },
+
+                            reduce: () {
+                              this.onGoodsStateChange(goods, goods.count - 1);
+                            },
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class InputNumber extends StatelessWidget {
+  final int count;
+  final Function add;
+  final Function reduce;
+
+  InputNumber(this.count, {this.add, this.reduce});
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      width: 80.0,
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          count > 0 ?
+            new GestureDetector(
+              child: new Container(
+                  height: 20.0,
+                  width: 20.0,
+                  alignment: Alignment.center,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: new Color(0xFFE9E9E9)
+                  ),
+                  child: new Text(
+                    '-',
+                    style: new TextStyle(
+                      color: Colors.grey,
+                      fontSize: 16.0,
+                    ),
+                  )
+              ),
+
+              onTap: () => reduce(),
+            ) :
+            new Container(),
+          
+          count > 0 ?
+            new Text(
+              count.toString(),
+            ) :
+            new Container(),
+
+          new GestureDetector(
+            child: new Container(
+                height: 20.0,
+                width: 20.0,
+                alignment: Alignment.center,
+                decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue
+                ),
+                child: new Text(
+                  '+',
+                  style: new TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                  ),
+                )
+            ),
+
+            onTap: () => add(),
+          ),
+        ],
       ),
     );
   }
@@ -239,6 +457,7 @@ class GoodsModel {
   double price;
   bool isCurrency;
   String goodsCode;
+  int count = 0;
 
   GoodsModel({
     this.goodsId,
