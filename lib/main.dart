@@ -7,15 +7,13 @@ import './src/navigator-with-param.dart';
 import './src/return-data-page.dart';
 import './src/banner.dart';
 import './src/goods-sale.dart';
+import './src/list-operation.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
-  BuildContext _context;
   @override
   Widget build(BuildContext context) {
-    _context = context;
-
     return new MaterialApp(
       title: 'Welcome to Flutter',
 
@@ -31,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/return-data-page': (BuildContext context) => new ReturnDataPage(),
         '/banner': (BuildContext context) => new BannerPage(),
         '/goods-sale': (BuildContext context) => new GoodsSale(),
+        '/list-operation': (BuildContext context) => new ListOperationState(),
       },
 
       home: new HomePage(),
@@ -122,6 +121,11 @@ class HomePage extends StatelessWidget {
               new RaisedButton(
                 child: new Text('复杂界面-商品售卖'),
                 onPressed: () => _pushToNavigator(context, '/goods-sale'),
+              ),
+
+              new RaisedButton(
+                child: new Text('List上拉加载，下拉刷新'),
+                onPressed: () => _pushToNavigator(context, '/list-operation'),
               ),
             ],
           ),

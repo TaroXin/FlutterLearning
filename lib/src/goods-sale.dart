@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:dio/dio.dart';
-import 'dart:async';
 
 class GoodsSale extends StatefulWidget {
   @override
@@ -236,7 +235,7 @@ class GoodsClass extends State<GoodsClassState> {
 
 class GoodsList extends StatelessWidget {
   final List<GoodsClassModel> _goodsList;
-  Function onGoodsStateChange;
+  final Function onGoodsStateChange;
 
   GoodsList(this._goodsList, {this.onGoodsStateChange});
 
