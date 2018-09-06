@@ -6,6 +6,7 @@ import './src/swiper-to-close.dart';
 import './src/navigator-with-param.dart';
 import './src/return-data-page.dart';
 import './src/banner.dart';
+import './src/goods-sale.dart';
 
 void main() => runApp(new MyApp());
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Welcome to Flutter',
 
       theme: new ThemeData(
-        primaryColor: Colors.blueGrey
+        primaryColor: Colors.blue
       ),
 
       routes: {
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/navigator-with-param': (BuildContext context) => new NavigatorWithParam(),
         '/return-data-page': (BuildContext context) => new ReturnDataPage(),
         '/banner': (BuildContext context) => new BannerPage(),
+        '/goods-sale': (BuildContext context) => new GoodsSale(),
       },
 
       home: new HomePage(),
@@ -115,7 +117,12 @@ class HomePage extends StatelessWidget {
                     msg: 'Toast 测试'
                   );
                 },
-              )
+              ),
+
+              new RaisedButton(
+                child: new Text('复杂界面-商品售卖'),
+                onPressed: () => _pushToNavigator(context, '/goods-sale'),
+              ),
             ],
           ),
         );
