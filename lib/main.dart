@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import './src/list.dart';
 import './src/image-example.dart';
 import './src/swiper-to-close.dart';
@@ -106,6 +107,15 @@ class HomePage extends StatelessWidget {
                 child: new Text('Banner 示例'),
                 onPressed: () => _pushToNavigator(context, '/banner'),
               ),
+
+              new RaisedButton(
+                child: new Text('显示 Toast'),
+                onPressed: () {
+                  Fluttertoast.showToast(
+                    msg: 'Toast 测试'
+                  );
+                },
+              )
             ],
           ),
         );
